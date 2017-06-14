@@ -57,12 +57,17 @@ FaceController::createFaceInNfd(const FaceUri& uri,
   _LOG_DEBUG("Creating Face in NFD with face-uri: " << uri);
   m_controller.start<ndn::nfd::FaceCreateCommand>(faceParameters, onSuccess,
                                                   [onSuccess, onFailure, uri] (const ndn::nfd::ControlResponse& response) {
-                                                    ndn::nfd::ControlParameters faceParams(response.getBody());
-                                                    if (response.getCode() == 409 && faceParams.getUri() == uri.toString()) {
-                                                      _LOG_DEBUG("Got 409 - treating as success");
-                                                      onSuccess(faceParams);
+                                                    try {
+                                                      ndn::nfd::ControlParameters faceParams(response.getBody());
+                                                      if (response.getCode() == 409 && faceParams.getUri() == uri.toString()) {
+                                                        _LOG_DEBUG("Got 409 - treating as success");
+                                                        onSuccess(faceParams);
+                                                      }
+                                                      else {
+                                                        onFailure(response);
+                                                      }
                                                     }
-                                                    else {
+                                                    catch (const std::exception& e) {
                                                       onFailure(response);
                                                     }
                                                   }
