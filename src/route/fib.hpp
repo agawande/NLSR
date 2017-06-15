@@ -27,8 +27,8 @@
 #include "fib-entry.hpp"
 #include "test-access-control.hpp"
 #include "utility/face-controller.hpp"
+#include <ndn-cxx/mgmt/nfd/controller.hpp>
 
-#include <ndn-cxx/management/nfd-controller.hpp>
 #include <ndn-cxx/util/time.hpp>
 
 namespace nlsr {
